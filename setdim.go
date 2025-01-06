@@ -9,6 +9,7 @@ import (
 )
 
 const Inch = 2.54
+const Cm = 1.0
 
 type Dims struct {
 	Width float64
@@ -44,8 +45,9 @@ func SetDensity(path, outpath string, densityCm float64) error {
 
 func SetDensityAndLabel(path, outpath string, densityCm float64, label string) error {
 	cmd := exec.Command("convert",
+		"-bordercolor", "white",
 		"-border", fmt.Sprint(densityCm),
-		"-label", label,
+		"-annotate", "+0+0", label,
 		"-pointsize", "24",
 		"-gravity", "northwest",
 		"-units", "PixelsPerCentimeter",
