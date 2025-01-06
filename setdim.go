@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 )
 
+const Inch = 2.54
+
 type Dims struct {
 	Width float64
 	Height float64
