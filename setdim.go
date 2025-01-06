@@ -49,8 +49,8 @@ func SetDensityAndLabel(path, outpath string, densityCm float64, label string) e
 		"-density", fmt.Sprint(densityCm),
 		"-bordercolor", "white",
 		"-border", fmt.Sprint(densityCm / 2.0),
+		"-pointsize", "12",
 		"-annotate", "+0+0", label,
-		"-pointsize", fmt.Sprint(densityCm * 12.0 / 72.0),
 		"-gravity", "northwest",
 		path,
 		outpath,
@@ -59,6 +59,7 @@ func SetDensityAndLabel(path, outpath string, densityCm float64, label string) e
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
+//		"-pointsize", fmt.Sprint(densityCm * 12.0 / 72.0),
 
 func SetWidthRaster(path, outpath string, widthCm float64) error {
 	dims, err := GetDims(path)
