@@ -46,9 +46,9 @@ func SetDensity(path, outpath string, densityCm float64) error {
 func SetDensityAndLabel(path, outpath string, densityCm float64, label string) error {
 	cmd := exec.Command("convert",
 		"-bordercolor", "white",
-		"-border", fmt.Sprint(densityCm),
+		"-border", fmt.Sprint(densityCm / 2.0),
 		"-annotate", "+0+0", label,
-		"-pointsize", "24",
+		"-pointsize", fmt.Sprint(densityCm * 12.0 / 72.0),
 		"-gravity", "northwest",
 		"-units", "PixelsPerCentimeter",
 		"-density", fmt.Sprint(densityCm),
