@@ -26,7 +26,12 @@ func GetDims(path string) (Dims, error) {
 		return Dims{}, e
 	}
 	var d Dims
-	_, e := fmt.Sscanf(b.String(), "%f x %f %f x %f")
+	_, e := fmt.Sscanf(b.String(), "%f x %f %f x %f",
+		&d.Width,
+		&d.Height,
+		&d.XPixelsPerCm,
+		&d.YPixelsPerCm,
+	)
 	return d, e
 }
 
