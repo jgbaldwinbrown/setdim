@@ -36,7 +36,7 @@ func GetDims(path string) (Dims, error) {
 }
 
 func SetDensity(path, outpath string, densityCm float64) error {
-	cmd := exec.Command("convert", "-units", "PixelsPerCentimeter", path, "-density", fmt.Sprint(densityCm), outpath)
+	cmd := exec.Command("convert", "-units", "PixelsPerCentimeter", "-density", fmt.Sprint(densityCm), path, outpath)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
