@@ -19,7 +19,7 @@ type Dims struct {
 
 func GetDims(path string) (Dims, error) {
 	var b strings.Builder
-	cmd := exec.Command("identify", "-format", "%w x %h %x x %y\\n", path)
+	cmd := exec.Command("identify", "-units", "PixelsPerCentimeter", "-format", "%w x %h %x x %y\\n", path)
 	cmd.Stdout = &b
 	cmd.Stderr = os.Stderr
 	if e := cmd.Run(); e != nil {
@@ -47,7 +47,8 @@ func SetWidthRaster(path, outpath string, widthCm float64) error {
 	if err != nil {
 		return err
 	}
-	newDensity := dims.XPixelsPerCm * (dims.Width / widthCm)
+	// newDensity := dims.XPixelsPerCm * (dims.Width / widthCm)
+	newDensith := dims.Width / widthCm
 	return SetDensity(path, outpath, newDensity)
 }
 
@@ -67,7 +68,8 @@ func SetWidthVector(path, outpath string, widthCm, densityPerCm float64) (err er
 	if err != nil {
 		return err
 	}
-	firstDensity := widthCm * densityPerCm / dims.Width
+	initCm := dims.Width / dims.XPixelsPerCm
+	firstDensity := widthCm * densityPerCm / initCm
 	finalDensity := densityPerCm
 	midpath := filepath.Join(tmpdir, "temp" + filepath.Ext(outpath))
 
