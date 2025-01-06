@@ -49,7 +49,7 @@ func SetDensityAndLabel(path, outpath string, densityCm float64, label string) e
 		"-density", fmt.Sprint(densityCm),
 		"-bordercolor", "white",
 		"-border", fmt.Sprint(densityCm / 2.0),
-		"-pointsize", "12",
+		"-pointsize", "36",
 		"-annotate", "+0+0", label,
 		"-gravity", "northwest",
 		path,
