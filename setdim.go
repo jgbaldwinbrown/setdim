@@ -48,7 +48,7 @@ func SetWidthRaster(path, outpath string, widthCm float64) error {
 		return err
 	}
 	// newDensity := dims.XPixelsPerCm * (dims.Width / widthCm)
-	newDensith := dims.Width / widthCm
+	newDensity := dims.Width / widthCm
 	return SetDensity(path, outpath, newDensity)
 }
 
