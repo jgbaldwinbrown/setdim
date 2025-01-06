@@ -42,6 +42,22 @@ func SetDensity(path, outpath string, densityCm float64) error {
 	return cmd.Run()
 }
 
+func SetDensityAndLabel(path, outpath string, densityCm float64, label string) error {
+	cmd := exec.Command("convert",
+		"-border", fmt.Sprint(densityCm),
+		"-label", label,
+		"-pointsize", "24",
+		"-gravity", "northwest",
+		"-units", "PixelsPerCentimeter",
+		"-density", fmt.Sprint(densityCm),
+		path,
+		outpath,
+	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 func SetWidthRaster(path, outpath string, widthCm float64) error {
 	dims, err := GetDims(path)
 	if err != nil {
@@ -50,6 +66,16 @@ func SetWidthRaster(path, outpath string, widthCm float64) error {
 	// newDensity := dims.XPixelsPerCm * (dims.Width / widthCm)
 	newDensity := dims.Width / widthCm
 	return SetDensity(path, outpath, newDensity)
+}
+
+func SetWidthRasterAndLabel(path, outpath string, widthCm float64, label string) error {
+	dims, err := GetDims(path)
+	if err != nil {
+		return err
+	}
+	// newDensity := dims.XPixelsPerCm * (dims.Width / widthCm)
+	newDensity := dims.Width / widthCm
+	return SetDensityAndLabel(path, outpath, newDensity, label)
 }
 
 func SetWidthVector(path, outpath string, widthCm, densityPerCm float64) (err error) {
@@ -77,6 +103,33 @@ func SetWidthVector(path, outpath string, widthCm, densityPerCm float64) (err er
 		return err
 	}
 	return SetDensity(midpath, outpath, finalDensity)
+}
+
+func SetWidthVectorAndLabel(path, outpath string, widthCm, densityPerCm float64, label string) (err error) {
+	tmpdir, err := os.MkdirTemp("", "setdim_SetWidthVector_*")
+	if err != nil {
+		return err
+	}
+	defer func() {
+		e := os.RemoveAll(tmpdir)
+		if err == nil {
+			err = e
+		}
+	}()
+
+	dims, err := GetDims(path)
+	if err != nil {
+		return err
+	}
+	initCm := dims.Width / dims.XPixelsPerCm
+	firstDensity := widthCm * densityPerCm / initCm
+	finalDensity := densityPerCm
+	midpath := filepath.Join(tmpdir, "temp" + filepath.Ext(outpath))
+
+	if err = SetDensity(path, midpath, firstDensity); err != nil {
+		return err
+	}
+	return SetDensityAndLabel(midpath, outpath, finalDensity, label)
 }
 
 // identify -format "%w x %h %x x %y\n" "$@"
